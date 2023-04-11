@@ -18,28 +18,50 @@ function check_update {
   done
 
   UPDATES_AVAILABLE=false
-  if [[ $REMOTE_MAJOR > $MAJOR ]]; then
+  if [[ $REMOTE_MAJOR > $2 ]]; then
     UPDATES_AVAILABLE=true
-  elif [[ $REMOTE_MINOR > $MINOR ]]; then
+    echo 1
+  else
+    echo 0
+  fi
+  if [[ $REMOTE_MINOR > $3 ]]; then
     UPDATES_AVAILABLE=true
-  elif [[ $REMOTE_PATCH > $PATCH ]]; then
+    echo 1
+  else
+    echo 0
+  fi
+  if [[ $REMOTE_PATCH > $4 ]]; then
     UPDATES_AVAILABLE=true
+    echo 1
+  else
+    echo 0
   fi
 
   if $UPDATES_AVAILABLE; then
-    echo "Current version: $2.$3.$4"
-    echo "Latest version: $REMOTE_MAJOR.$REMOTE_MINOR.$REMOTE_PATCH"
+    echo "Current version: $2.$3.$4" >&2
+    echo "Latest version: $REMOTE_MAJOR.$REMOTE_MINOR.$REMOTE_PATCH" >&2
 
-    echo "A new version is available. Do you want to update? (y/n)"
+    echo "A new version is available. Do you want to update? (y/n)" >&2
     read answer
     while [ "$answer" != "y" ] && [ "$answer" != "n" ]; do
-        echo "Invalid input, please enter y or n:"
+        echo "Invalid input, please enter y or n:" >&2
         read answer
     done
     if [ "$answer" == "y" ]; then
+      echo $REMOTE_MAJOR
+      echo $REMOTE_MINOR
+      echo $REMOTE_PATCH
       return 1
     else
+      echo $2
+      echo $3
+      echo $4
       return 0
     fi
+  else
+    echo $2
+    echo $3
+    echo $4
+    return 0
   fi
 }
