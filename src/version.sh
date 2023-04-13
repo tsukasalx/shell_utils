@@ -1,7 +1,8 @@
 #!/bin/bash
 
 function check_update {
-  REMOTE_ENV=$(wget -qO- "$1")
+  echo "checking update..." >&2
+  REMOTE_ENV=$(wget --timeout=10 -qO- "$1")
   if [ $? -ne 0 ]; then
     echo "Request the lastest version info failed" >&2
     echo 0
