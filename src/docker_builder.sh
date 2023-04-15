@@ -8,6 +8,10 @@ function build_image {
 
     function find_image {
       ver=$(docker images | grep $image_name | awk '{print $2}' | grep $1)
+      if [ $? -ne 0 ]; then
+        echo "find_image function error"
+      fi
+
       if [[ -z $ver ]]; then
         return 0
       else
@@ -27,13 +31,13 @@ function build_image {
       fi
 
       docker tag $image_name $image_name_with_tag
-    fi
 
-    # Verify if build is successful, if not, exit with error
-    if find_image "$image_tag" -eq 0; then
-      echo "Error: $image_name_with_tag build failed." >&2
-      exit 1
-    else
-      echo "$image_name_with_tag build successfully."
+      # Verify if build is successful, if not, exit with error
+      if find_image "$image_tag" -eq 0; then
+        echo "Error: $image_name_with_tag build failed." >&2
+        exit 1
+      else
+        echo "$image_name_with_tag build successfully."
+      fi
     fi
 }
