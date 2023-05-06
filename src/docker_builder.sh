@@ -2,8 +2,9 @@
 
 function build_image {
     # Check if image exists, if not, build using docker-compose
-    image_name=$1
-    image_tag=$2
+    docker_dir=$1
+    image_name=$2
+    image_tag=$3
     image_name_with_tag=$image_name:$image_tag
 
     function find_image {
@@ -18,12 +19,12 @@ function build_image {
     if find_image "$image_tag" -eq 0; then
       echo "$image_name_with_tag image not found. Building..."
 
-      if [ $3 -eq 1 ]; then
-        (cd $(dirname "$0")/../docker && docker-compose build --no-cache)
-      elif [ $4 -eq 1 ]; then
-        (cd $(dirname "$0")/../docker && docker-compose build)
+      if [ $4 -eq 1 ]; then
+        (cd $docker_dir && docker-compose build --no-cache)
+      elif [ $5 -eq 1 ]; then
+        (cd $docker_dir && docker-compose build)
       elif find_image "latest" -eq 0; then
-        (cd $(dirname "$0")/../docker && docker-compose build)
+        (cd $docker_dir && docker-compose build)
       fi
 
       docker tag $image_name $image_name_with_tag
