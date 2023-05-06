@@ -46,8 +46,8 @@ function check_update {
       echo 0
     fi
 
+    echo "Current version: $2.$3.$4" >&2
     if $UPDATES_AVAILABLE; then
-      echo "Current version: $2.$3.$4" >&2
       echo "Latest version: $REMOTE_MAJOR.$REMOTE_MINOR.$REMOTE_PATCH" >&2
 
       echo "A new version is available. Do you want to update? (y/n)" >&2
